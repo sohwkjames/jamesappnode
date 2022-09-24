@@ -38,7 +38,7 @@ let notes = [
 ];
 
 app.get("/", (request, response) => {
-  response.send("<h1>Hello world</h1>");
+  response.send("<h1>Hello world, this is with Github actions</h1>");
 });
 
 app.get("/api/notes", (request, response) => {
