@@ -35,24 +35,48 @@ app.get("/api/tickets", (request, response) => {
   });
 });
 
-// app.get("/api/notes/:id", (request, response) => {
-//   const id = Number(request.params.id);
-//   const note = notes.find((note) => {
-//     return note.id === id;
-//   });
-//   if (note) {
-//     response.json(note);
-//   } else {
-//     response.status(404).end();
-//   }
-// });
+app.post("/api/tickets", (request, response, next) => {
+  const body = request.body;
+  if (body.content === undefined) {
+    return response.status(404);
+  }
 
-// app.post("/api/notes", (request, response) => {
-//   const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
-//   const note = request.body;
-//   console.log(note);
-//   response.json(note);
-// });
+  const ticket = new Ticket({
+    content: body.content,
+    important: body.important || false,
+    date: new Date(),
+  });
+
+  ticket
+    .save()
+    .then((savedTicket) => {
+      response.json(savedTicket);
+    })
+    .catch((err) => {
+      console.log("Error saving ticket", err);
+      next(err);
+    });
+});
+
+app.get("/api/tickets/:id", (request, response, next) => {
+  console.log("in api/tickets/:id");
+  const id = request.params.id;
+  Ticket.findById(id)
+    .then((ticket) => {
+      if (ticket) {
+        console.log("TIcket found");
+        response.json(ticket);
+      } else {
+        console.log("Ticket not found");
+        response.status(404).end();
+      }
+    })
+    .catch((err) => {
+      console.log("Could not find ticket", err);
+      next(err);
+      // response.status(500).send({ error: "Malformatted id" });
+    });
+});
 
 // app.delete("/api/notes/:id", (req, res) => {
 //   const id = Number(request.params.id);
@@ -66,6 +90,20 @@ const unknownEndpoint = (request, response) => {
 };
 
 app.use(unknownEndpoint);
+
+// Error handler
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+
+  next(error);
+};
+
+// this has to be the last loaded middleware.
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
