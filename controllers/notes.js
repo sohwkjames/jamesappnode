@@ -1,6 +1,8 @@
 const ticketRouter = require("express").Router();
 const Ticket = require("../models/ticket");
 
+// Defines routes, and the controller methods.
+
 ticketRouter.get("/", (request, response) => {
   Ticket.find({}).then((tickets) => {
     response.json(tickets);
