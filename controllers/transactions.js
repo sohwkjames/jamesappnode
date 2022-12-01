@@ -1,8 +1,22 @@
 const transactionRouter = require("express").Router();
 const Transaction = require("../models/transaction");
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
-// Defines routes, and the controller methods.
+function getTokenFrom(request) {
+  // Checks the request for the authorization key
+  const auth = request.get("authorization");
+  if (auth && auth.toLowerCase().startsWith("bearer")) {
+    return auth.substring(7);
+  }
+
+  return null;
+}
+
+transactionRouter.get('/', async (request, response, next) => {
+  const body = request.body;
+  
+})
 
 transactionRouter.get("/", (request, response) => {
   Transaction.find({}).then((transactions) => {
@@ -11,6 +25,7 @@ transactionRouter.get("/", (request, response) => {
 });
 
 transactionRouter.post("/", async (request, response, next) => {
+
   const { userId, amount } = request.body;
 
   const user = await User.findById(userId);
