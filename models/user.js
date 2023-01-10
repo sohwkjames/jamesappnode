@@ -10,6 +10,12 @@ const userSchema = new mongoose.Schema({
       ref: "Transaction",
     },
   ],
+  tomatoes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tomato",
+    },
+  ]
 });
 
 userSchema.set("toJSON", {

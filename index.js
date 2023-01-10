@@ -16,6 +16,7 @@ const ticketRouter = require("./controllers/notes");
 const usersRouter = require("./controllers/users");
 const transactionRouter = require("./controllers/transactions");
 const loginRouter = require("./controllers/login");
+const tomatoRouter = require("./controllers/tomatoes");
 
 logger.info("connecting to", config.MONGODB_URI);
 
@@ -33,8 +34,9 @@ app.use(cors());
 app.use(middleware.requestLogger);
 
 // Routes
-app.use("/api/tickets", ticketRouter);
-app.use("/api/transactions", transactionRouter);
+// app.use("/api/tickets", ticketRouter);
+// app.use("/api/transactions", transactionRouter);
+app.use("/api/tomatoes", tomatoRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
 

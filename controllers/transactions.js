@@ -1,58 +1,58 @@
-const transactionRouter = require("express").Router();
-const Transaction = require("../models/transaction");
-const User = require("../models/user");
-const jwt = require("jsonwebtoken");
+// const transactionRouter = require("express").Router();
+// const Transaction = require("../models/transaction");
+// const User = require("../models/user");
+// const jwt = require("jsonwebtoken");
 
-function getTokenFrom(request) {
-  // Checks the request for the authorization key
-  const auth = request.get("authorization");
-  if (auth && auth.toLowerCase().startsWith("bearer")) {
-    return auth.substring(7);
-  }
+// function getTokenFrom(request) {
+//   // Checks the request for the authorization key
+//   const auth = request.get("authorization");
+//   if (auth && auth.toLowerCase().startsWith("bearer")) {
+//     return auth.substring(7);
+//   }
 
-  return null;
-}
+//   return null;
+// }
 
-transactionRouter.get('/', async (request, response, next) => {
-  const body = request.body;
-  
-})
+// transactionRouter.get('/', async (request, response, next) => {
+//   const body = request.body;
 
-transactionRouter.get("/", (request, response) => {
-  Transaction.find({}).then((transactions) => {
-    response.json(transactions);
-  });
-});
+// })
 
-transactionRouter.post("/", async (request, response, next) => {
+// transactionRouter.get("/", (request, response) => {
+//   Transaction.find({}).then((transactions) => {
+//     response.json(transactions);
+//   });
+// });
 
-  const { userId, amount } = request.body;
+// transactionRouter.post("/", async (request, response, next) => {
 
-  const user = await User.findById(userId);
+//   const { userId, amount } = request.body;
 
-  const transaction = new Transaction({
-    amount: amount,
-    date: new Date(),
-    user: user._id,
-  });
+//   const user = await User.findById(userId);
 
-  const savedTransaction = await transaction.save();
+//   const transaction = new Transaction({
+//     amount: amount,
+//     date: new Date(),
+//     user: user._id,
+//   });
 
-  user.transactions = user.transactions.concat(savedTransaction._id);
-  await user.save();
+//   const savedTransaction = await transaction.save();
 
-  response.json(savedTransaction);
-});
+//   user.transactions = user.transactions.concat(savedTransaction._id);
+//   await user.save();
 
-transactionRouter.delete("/", async (request, response, next) => {
-  const { userId } = request.body;
+//   response.json(savedTransaction);
+// });
 
-  const user = await User.findById(userId);
-  user.transactions = [];
+// transactionRouter.delete("/", async (request, response, next) => {
+//   const { userId } = request.body;
 
-  await user.save();
+//   const user = await User.findById(userId);
+//   user.transactions = [];
 
-  response.json(user);
-});
+//   await user.save();
 
-module.exports = transactionRouter;
+//   response.json(user);
+// });
+
+// module.exports = transactionRouter;
