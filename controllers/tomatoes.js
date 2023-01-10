@@ -40,7 +40,7 @@ tomatoRouter.post("/", async (request, response, next) => {
   });
 
   await tomato.save();
-  response.json(tomato);
+  // response.json(tomato);
 
   response.status(200).json({ tomato: tomato });
 });
