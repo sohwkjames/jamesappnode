@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const mongooseUrl = process.env.MONGODB_URI;
 
 const tomatoSchema = new mongoose.Schema({
-  focusType: {
+  statType: {
     type: String,
     required: true,
   },
@@ -26,5 +26,5 @@ tomatoSchema.set("toJSON", {
 });
 
 const Tomato = mongoose.model("Tomato", tomatoSchema);
-
+  
 module.exports = Tomato;

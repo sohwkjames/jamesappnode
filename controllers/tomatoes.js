@@ -34,7 +34,7 @@ tomatoRouter.post("/", async (request, response, next) => {
 
   // Save the toamto here
   const tomato = new Tomato({
-    focusType: request.body?.focusType,
+    statType: request.body?.statType,
     date: new Date(),
     user: user._id,
   });
