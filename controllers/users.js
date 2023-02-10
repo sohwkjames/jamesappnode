@@ -1,4 +1,5 @@
 // hashing passwords
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const usersRouter = require("express").Router();
 const User = require("../models/user");
@@ -7,7 +8,7 @@ usersRouter.get("/current", async (request, response) => {
   console.log("request", request);
 });
 
-// sign up
+// New user sign up
 usersRouter.post("/", async (request, response) => {
   // Get username, name, password from request.body
 
@@ -35,11 +36,23 @@ usersRouter.post("/", async (request, response) => {
     passwordHash,
   });
 
-  console.log("user->", user);
-
   const savedUser = await user.save();
 
-  response.status(201).json(savedUser);
+  console.log("savedUser", savedUser);
+
+  // Create obj with username and user.id
+  const userForToken = {
+    username: savedUser.username,
+    id: savedUser._id,
+  };
+
+  // Sign the obj with secret key, get token
+  const token = jwt.sign(userForToken, process.env.JWT_SECRET);
+
+  // Send the token back in the shape of { token, username, name }
+  console.log("Sending token:", token);
+
+  response.status(201).json(token);
 });
 
 module.exports = usersRouter;

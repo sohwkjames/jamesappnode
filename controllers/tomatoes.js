@@ -13,8 +13,20 @@ function getTokenFrom(request) {
   return null;
 }
 
-tomatoRouter.get("/", (request, response) => {
-  Tomato.find({}).then((tomatoes) => {
+tomatoRouter.get("/", async (request, response) => {
+  // Expects jwt in request header: { authorization: bearer abc123 }
+  const token = getTokenFrom(request);
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
+  }
+
+  const user = await User.findById(decodedToken.id);
+
+  console.log("Found user from id:", user);
+
+  Tomato.find({ user: user }).then((tomatoes) => {
     response.json(tomatoes);
   });
 });
