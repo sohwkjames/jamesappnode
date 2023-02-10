@@ -50,9 +50,12 @@ usersRouter.post("/", async (request, response) => {
   const token = jwt.sign(userForToken, process.env.JWT_SECRET);
 
   // Send the token back in the shape of { token, username, name }
-  console.log("Sending token:", token);
 
-  response.status(201).json(token);
+  response.status(201).send({
+    token,
+    username: savedUser.username,
+    name: savedUser.username,
+  });
 });
 
 module.exports = usersRouter;
