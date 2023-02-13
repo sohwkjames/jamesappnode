@@ -27,7 +27,7 @@ tomatoRouter.get("/", async (request, response) => {
   console.log("Found user from id:", user);
 
   Tomato.find({ user: user }).then((tomatoes) => {
-    response.json(tomatoes);
+    response.json({ data: tomatoes });
   });
 });
 
